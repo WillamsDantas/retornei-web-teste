@@ -314,10 +314,14 @@
   function fecharDet(semRender) {
     if (!S.det) return;
     S.det = false;
-    if (history.state && history.state.det) { try { history.back(); } catch (_) { /* nada */ } }
+    if (history.state && history.state.det) { try { window.__ignorarVoltar = true; history.back(); } catch (_) { /* nada */ } }
     if (!semRender) render();
   }
-  window.addEventListener('popstate', () => { if (S.det) { S.det = false; render(); } });
+  window.addEventListener('popstate', () => {
+    if (window.__ignorarVoltar) { window.__ignorarVoltar = false; return; }
+    if (document.querySelector('.overlay')) return;
+    if (S.det) { S.det = false; render(); }
+  });
   let tamanhoAntes = window.innerWidth;
   window.addEventListener('resize', () => {
     const w = window.innerWidth;
@@ -397,7 +401,7 @@
     }
     const views = { mais: viewMais, hoje: viewHoje, encomendas: viewEncomendas, clientes: viewClientes, relatorios: viewRelatorios, equipe: viewEquipe, ajustes: viewAjustes, ajuda: viewAjuda };
     const fab = celular() && ['hoje', 'encomendas', 'clientes'].includes(S.view) && !(S.view === 'hoje' && S.det); // WEB
-    patch(root, `<div class="app${celular() ? ' cel' : ''}">${sidebar()}<main class="main${topbar() ? '' : ' sem-topo'}" id="main">${topbar()}${views[S.view]()}</main>${celular() ? navBaixo() : ''}${fab ? `<button class="fab" type="button" data-act="novo">${ic('plus')}Nova venda</button>` : ''}</div>`);
+    patch(root, `<div class="app${celular() ? ' cel' : ''}">${sidebar()}<main class="main${topbar() ? '' : ' sem-topo'}" id="main">${topbar()}${views[S.view]()}</main>${celular() ? navBaixo() : ''}${fab ? (S.view === 'encomendas' ? `<button class="fab" type="button" data-act="novo">${ic('sino')}Avisar quando chegar</button>` : `<button class="fab" type="button" data-act="novo">${ic('plus')}Nova venda</button>`) : ''}</div>`);
     renderDrawer();
   }
   let TOUR_ADIADO = false;
@@ -958,7 +962,7 @@ ${api.pdf ? `<button class="btn primary" type="button" data-act="manual-pdf" sty
       : '';
     return `<div class="field"><label for="${pref}-cupom">Nota fiscal</label>
       <div class="doc nota${erroTxt ? ' inv' : ''}${open ? ' open' : ''}"><div class="dd doc-dd"><button type="button" class="doc-tipo${modelo ? '' : ' vazio'}" id="${listaId}" data-act="dd" data-v="${listaId}" aria-haspopup="listbox" aria-expanded="${open}" aria-label="Modelo da nota: ${modelo ? MODELO_NOME[modelo] : 'não informado'}">${modelo ? MODELO_NOME[modelo] : 'Modelo'}${ic('chev', 'ic-16')}</button>${lista}</div>
-        <input id="${pref}-cupom" ${dataAttr}="cupom" value="${esc(valor)}" placeholder="Nº da nota" autocomplete="off" aria-label="Número da nota"></div><span class="err" id="err-cupom">${esc(erroTxt || '')}</span></div>`;
+        <input id="${pref}-cupom" ${dataAttr}="cupom" value="${esc(valor)}" placeholder="Nº da nota" inputmode="numeric" autocomplete="off" aria-label="Número da nota"></div><span class="err" id="err-cupom">${esc(erroTxt || '')}</span></div>`;
   }
 
   function dataRotulo(iso) {
@@ -1802,7 +1806,7 @@ ${api.pdf ? `<button class="btn primary" type="button" data-act="manual-pdf" sty
       <header><div style="display:flex;flex-direction:column;gap: var(--sp-1);min-width:0"><h2 id="ev-t">Editar venda</h2><span class="small muted ell">${esc(nomeCli(c))} · ${esc(R.formatPhone(c.celular))}</span></div><button type="button" class="round" data-act="ev-fechar" aria-label="Fechar" title="Fechar (Esc)">${ic('x', 'ic-20')}</button></header>
       <form data-form="venda-edit" novalidate><div class="body">
         <div class="grid3" style="grid-template-columns:${c.tipo === 'atacado' ? '1.7fr 1fr 1.2fr' : '1fr 1fr 1.2fr'}">
-          ${c.tipo === 'atacado' ? campoNota('ev', EV.modelo, EV.cupom, e.cupom, 'data-ev') : `<div class="field"><label for="ev-cupom">Nº do cupom</label><input class="input" id="ev-cupom" data-ev="cupom" value="${esc(EV.cupom)}" autocomplete="off" ${inv('cupom')}>${err('cupom')}</div>`}
+          ${c.tipo === 'atacado' ? campoNota('ev', EV.modelo, EV.cupom, e.cupom, 'data-ev') : `<div class="field"><label for="ev-cupom">Nº do cupom</label><input class="input" id="ev-cupom" data-ev="cupom" value="${esc(EV.cupom)}" inputmode="numeric" autocomplete="off" ${inv('cupom')}>${err('cupom')}</div>`}
           <div class="field"><label for="ev-valor">Valor</label><div class="prefix"><span>R$</span><input class="input" id="ev-valor" data-ev="valor" value="${esc(EV.valor)}" inputmode="numeric" autocomplete="off" ${inv('valor')}></div>${err('valor')}</div>
           <div class="field"><label for="m-data">Data da compra</label>${campoData(!!e.data)}${err('data')}</div></div>
         <div class="grid-vend"><div class="field"><label for="ev-vend">Vendedor</label>${dd('ev-vend', { invalid: !!e.vendedorId })}${err('vendedorId')}</div>
@@ -2265,7 +2269,7 @@ ${api.pdf ? `<button class="btn primary" type="button" data-act="manual-pdf" sty
         <div class="field"><label for="m-valor">Valor</label><div class="prefix"><span>R$</span><input class="input" id="m-valor" data-m="valor" value="${esc(M.valor)}" placeholder="0,00" inputmode="numeric" autocomplete="off" ${inv('valor')}></div>${err('valor')}</div></div>
       <div class="grid2 at-linha"><div class="field"><label for="m-data">Data da compra</label>${campoData(!!e.data)}${err('data')}</div>${vendSel}</div>
       <div class="field"><span class="legend">Chamar de novo em</span><div class="dias-linha"><div class="chips" id="m-dias">${diasHtml()}</div><p class="hint" id="m-prev">${prevLembretes()}</p></div>${err('dias')}</div>` : `<div class="grid3">
-        <div class="field"><label for="m-cupom">Nº do cupom</label><input class="input" id="m-cupom" data-m="cupom" value="${esc(M.cupom)}" placeholder="Ex.: 004612" autocomplete="off" ${inv('cupom')}>${err('cupom')}</div>
+        <div class="field"><label for="m-cupom">Nº do cupom</label><input class="input" id="m-cupom" data-m="cupom" value="${esc(M.cupom)}" placeholder="Ex.: 004612" inputmode="numeric" autocomplete="off" ${inv('cupom')}>${err('cupom')}</div>
         <div class="field"><label for="m-valor">Valor</label><div class="prefix"><span>R$</span><input class="input" id="m-valor" data-m="valor" value="${esc(M.valor)}" placeholder="0,00" inputmode="numeric" autocomplete="off" ${inv('valor')}></div>${err('valor')}</div>
         <div class="field"><label for="m-data">Data da compra</label>${campoData(!!e.data)}${err('data')}</div></div>
       <div class="grid-vend">${vendSel}

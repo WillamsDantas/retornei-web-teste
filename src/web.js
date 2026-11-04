@@ -30,3 +30,31 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
   });
   new MutationObserver(() => requestAnimationFrame(mostrar)).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['aria-current', 'class'] });
 })();
+
+// botão voltar do celular: fecha a janela aberta (Nova venda, ficha, confirmação…) em vez de sair do app
+(function () {
+  let abertas = 0;
+  const contar = () => document.querySelectorAll('.overlay').length;
+  new MutationObserver(() => {
+    const n = contar();
+    if (n > abertas) { for (let i = abertas; i < n; i++) history.pushState({ janela: 1 }, ''); }
+    else if (n < abertas && !window.__fechandoPeloVoltar) {
+      // fechou pelo X, Cancelar ou Salvar: tira do histórico a entrada que ficou sobrando
+      for (let i = n; i < abertas; i++) { window.__ignorarVoltar = true; history.back(); }
+    }
+    window.__fechandoPeloVoltar = false;
+    abertas = n;
+  }).observe(document.body, { childList: true, subtree: true });
+  window.addEventListener('popstate', () => {
+    if (!contar()) return;
+    window.__fechandoPeloVoltar = true;
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    // janela que não fecha com Esc: tenta o botão de fechar dela
+    setTimeout(() => {
+      if (contar() >= abertas && abertas) {
+        const b = [...document.querySelectorAll('.overlay')].pop().querySelector('[data-act$="fechar"], [data-act="fechar"], [aria-label="Fechar"], [data-cf="0"]');
+        if (b) b.click(); else history.pushState({ janela: 1 }, '');
+      }
+    }, 60);
+  });
+})();
