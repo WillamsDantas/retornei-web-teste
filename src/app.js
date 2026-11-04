@@ -523,7 +523,7 @@
 
   /** Animação de abertura (não aparece quando o app abre sozinho com o Windows; um clique pula). */
   function abertura() {
-    if (!api || !api.electron || new URLSearchParams(location.search).get('min') === '1') return;
+    if (!api || !(api.electron || api.web) || new URLSearchParams(location.search).get('min') === '1') return;
     const letras = 'retornei'.split('').map((l, i) => `<span class="lt" style="animation-delay:${(0.95 + i * 0.07).toFixed(2)}s">${l}</span>`).join('');
     document.body.insertAdjacentHTML('beforeend', `<div class="abertura" id="abertura"><span class="lk"><svg width="72" height="72" viewBox="0 0 100 100" aria-hidden="true"><path class="ol" d="${BOLHA}" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><path class="fl" d="${BOLHA}" fill="currentColor"/><polyline class="ck" points="33 43 45 55 67 33" fill="none" stroke="var(--surface)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="wd" aria-label="retornei">${letras}</span></span></div>`);
     const el = document.getElementById('abertura');

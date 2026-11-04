@@ -1506,7 +1506,25 @@
     imprimir: async () => {
       window.print();
       return ok(true);
-    }
+    },
+    // PDF: a impressão do navegador tem "Salvar como PDF"; o nome sugerido vem do título da página
+    pdf: (nome) => new Promise((fim) => {
+      const titulo = document.title;
+      document.title = String(nome || "retornei");
+      let feito = false;
+      const pronto = () => {
+        if (feito) return;
+        feito = true;
+        window.removeEventListener("afterprint", pronto);
+        document.title = titulo;
+        fim(ok(null));
+      };
+      window.addEventListener("afterprint", pronto);
+      setTimeout(() => {
+        window.print();
+        setTimeout(pronto, 1500);
+      }, 50);
+    })
   };
   window.RetorneiTeste = {
     recomecar() {

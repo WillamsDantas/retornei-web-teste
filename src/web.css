@@ -218,3 +218,6 @@ body.web { -webkit-tap-highlight-color: transparent; }
 
 /* listas e calendário: nunca saem da tela (o web.js empurra para dentro) */
 @media (max-width: 699px) { .dd-list, .cal { max-width: calc(100vw - 24px); } }
+
+/* impressão e PDF: sem a barra de baixo e o botão flutuante */
+@media print { .bnav, .fab, .det-scrim { display: none !important; } .app.cel .main { padding-bottom: 0; } }
