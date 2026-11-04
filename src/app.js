@@ -525,11 +525,16 @@
   function abertura() {
     if (!api || !(api.electron || api.web) || new URLSearchParams(location.search).get('min') === '1') return;
     const letras = 'retornei'.split('').map((l, i) => `<span class="lt" style="animation-delay:${(0.95 + i * 0.07).toFixed(2)}s">${l}</span>`).join('');
-    document.body.insertAdjacentHTML('beforeend', `<div class="abertura" id="abertura"><span class="lk"><svg width="72" height="72" viewBox="0 0 100 100" aria-hidden="true"><path class="ol" d="${BOLHA}" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><path class="fl" d="${BOLHA}" fill="currentColor"/><polyline class="ck" points="33 43 45 55 67 33" fill="none" stroke="var(--surface)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="wd" aria-label="retornei">${letras}</span></span></div>`);
+    document.body.insertAdjacentHTML('beforeend', `<div class="abertura" id="abertura"><span class="lk"><svg width="${api.web ? 88 : 72}" height="${api.web ? 88 : 72}" viewBox="0 0 100 100" aria-hidden="true"><path class="ol" d="${BOLHA}" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><path class="fl" d="${BOLHA}" fill="currentColor"/><polyline class="ck" points="33 43 45 55 67 33" fill="none" stroke="var(--surface)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>${api.web ? '' : `<span class="wd" aria-label="retornei">${letras}</span>`}</span></div>`);
     const el = document.getElementById('abertura');
     const fim = () => { if (!el.isConnected) return; el.classList.add('sai'); setTimeout(() => el.remove(), 380); };
     el.addEventListener('click', fim);
-    setTimeout(fim, 2100);
+    // web: a barra do celular fica branca durante a abertura (sem faixa cinza no topo)
+    const cores = api.web ? [...document.querySelectorAll('meta[name="theme-color"]')] : [];
+    const antes = cores.map((m) => m.content);
+    cores.forEach((m) => { m.content = getComputedStyle(document.documentElement).getPropertyValue('--surface').trim() || '#FFFFFF'; });
+    el.addEventListener('transitionend', () => cores.forEach((m, i) => { m.content = antes[i]; }), { once: true });
+    setTimeout(fim, api.web ? 1300 : 2100);
   }
 
   // chave mestra: conta do suporte, que não aparece na lista nem fica registrada
