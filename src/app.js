@@ -2293,7 +2293,7 @@ ${api.pdf ? `<button class="btn primary" type="button" data-act="manual-pdf" sty
         ${venda ? corpoVenda : corpoAviso}
       </div>
       <footer>${venda && !M.obsAberta ? '<button type="button" class="link blue" data-act="m-obs">Adicionar observação</button>' : '<span></span>'}
-        <div class="right"><button type="button" class="btn ghost" data-act="modal-fechar">Cancelar</button><button type="submit" class="btn primary lg" ${M.salvando ? 'disabled' : ''}>${venda ? 'Salvar venda' : 'Salvar pedido'}</button></div></footer></form>
+        <div class="right"><button type="button" class="btn ghost" data-act="modal-fechar">Cancelar</button><button type="submit" class="btn primary lg" ${M.salvando ? 'disabled' : ''}>Salvar</button></div></footer></form>
     </section></div>`);
   }
 
