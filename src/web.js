@@ -18,3 +18,15 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
   new MutationObserver(() => requestAnimationFrame(ajustar)).observe(document.body, { childList: true, subtree: true });
   window.addEventListener('resize', ajustar);
 })();
+
+// faixas que rolam para o lado (Ajustes, Ajuda): a opção escolhida fica sempre à vista
+(function () {
+  const mostrar = () => document.querySelectorAll('.snav [aria-current="true"], .aj-nav button.on').forEach((b) => {
+    const f = b.parentElement.closest('.snav, .aj-nav');
+    if (!f || f.scrollWidth <= f.clientWidth) return;
+    const l = b.offsetLeft - f.offsetLeft, r = l + b.offsetWidth;
+    if (l < f.scrollLeft) f.scrollLeft = l - 16;
+    else if (r > f.scrollLeft + f.clientWidth) f.scrollLeft = r - f.clientWidth + 16;
+  });
+  new MutationObserver(() => requestAnimationFrame(mostrar)).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['aria-current', 'class'] });
+})();

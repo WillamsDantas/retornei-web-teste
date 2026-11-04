@@ -418,7 +418,7 @@
   function viewMais() {
     const it = (v, label, icone) => `<button type="button" class="mais-it" data-act="nav" data-v="${v}">${ic(icone)}<span>${label}</span>${ic('chev', 'ic-16 mais-seta')}</button>`;
     return `<div class="page"><div class="page-head"><div class="t"><h1>Mais</h1></div></div>
-      <div class="mais-loja">${LOGO_O('lg-mais', 40)}<div><b>${esc(S.data.loja.nome)}</b><span class="xs muted">Versão de teste · dados só neste aparelho</span></div></div>
+      <div class="mais-loja"><span class="logo-full">${LOGO_FULL('lg-mais', 26)}</span><div class="loja"><span class="store-name ell">${esc(S.data.loja.nome)}</span><span class="xs muted ell">Versão de teste · dados só neste aparelho</span></div></div>
       <section class="card mais-lista">${it('relatorios', 'Relatórios', 'relatorios')}${it('equipe', 'Equipe', 'equipe')}${it('ajustes', 'Ajustes', 'ajustes')}${it('ajuda', 'Ajuda', 'ajuda')}</section>
       <section class="card mais-lista"><button type="button" class="mais-it" data-act="recomecar">${ic('atualizar')}<span>Recomeçar teste</span></button></section></div>`;
   }
@@ -1641,7 +1641,7 @@ ${api.pdf ? `<button class="btn primary" type="button" data-act="manual-pdf" sty
       <header><h2 id="rs-t">Resumo do dia</h2><button type="button" class="round" data-act="rs-fechar" aria-label="Fechar" title="Fechar (Esc)">${ic('x', 'ic-20')}</button></header>
       <form data-form="resumo" novalidate><div class="body" style="gap: var(--sp-4)">${destino}
         <div class="preview wrap" style="white-space:pre-wrap">${negrito(txt)}</div>
-        <label class="check"><input type="checkbox" data-act="rs-aviso" ${cfg.avisoAtivo ? 'checked' : ''}>Avisar no Windows todo dia às ${esc(cfg.avisoHora || '08:30')}</label></div>
+        ${api.web ? '' : `<label class="check"><input type="checkbox" data-act="rs-aviso" ${cfg.avisoAtivo ? 'checked' : ''}>Avisar no Windows todo dia às ${esc(cfg.avisoHora || '08:30')}</label>`}</div>
       <footer><span></span><div class="right"><button type="button" class="btn ghost" data-act="rs-fechar">Fechar</button><button type="submit" class="btn primary lg">${WA(true)}Abrir no WhatsApp</button></div></footer></form>
     </section></div>`);
   }
