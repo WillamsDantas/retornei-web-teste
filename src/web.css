@@ -10,6 +10,9 @@ body.web { -webkit-tap-highlight-color: transparent; }
 .erow .meta[data-act="cliente"] { cursor: pointer; }
 @media (hover: hover) { .erow .meta[data-act="cliente"]:hover b { color: var(--ptext); } }
 
+/* janelas (Nova venda etc.) no meio da tela no tablet; no celular ocupam a tela toda */
+@media (min-width: 700px) { .overlay:not(.drawer-overlay) > .dialog { margin-top: auto; margin-bottom: auto; } }
+
 /* toque: alvos maiores em qualquer tela de toque */
 @media (pointer: coarse) {
   /* sem barra de rolagem piscando na lateral (no toque ela não serve para nada) */

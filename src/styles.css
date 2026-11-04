@@ -289,7 +289,7 @@ h1 { font-size: var(--fs-24); line-height: 32px; font-weight: 400; }
 .enc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(460px, 1fr)); gap: var(--sp-6); align-items: start; }
 .enc-head { padding: var(--sp-6) var(--sp-6) var(--sp-4) var(--sp-6); display: flex; align-items: flex-start; justify-content: space-between; gap: var(--sp-4); }
 .enc-head h2 { font-size: var(--fs-16); line-height: 24px; font-weight: 500; }
-.erow { min-height: 56px; padding: var(--sp-2) var(--sp-4) var(--sp-2) var(--sp-6); border-top: 1px solid var(--sep); display: flex; align-items: center; gap: var(--sp-3); }
+.erow { min-height: 56px; padding: var(--sp-2) var(--sp-6) var(--sp-2) var(--sp-6); border-top: 1px solid var(--sep); display: flex; align-items: center; gap: var(--sp-3); }
 .erow .meta { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .erow .meta b { font-weight: 400; font-size: var(--fs-14); line-height: 20px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .erow .meta span { font-size: var(--fs-12); line-height: 16px; color: var(--l3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
