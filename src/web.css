@@ -8,6 +8,9 @@ body.web { -webkit-tap-highlight-color: transparent; }
 
 /* toque: alvos maiores em qualquer tela de toque */
 @media (pointer: coarse) {
+  /* sem barra de rolagem piscando na lateral (no toque ela não serve para nada) */
+  * { scrollbar-width: none; }
+  *::-webkit-scrollbar { display: none; }
   .dd-hint { display: none !important; }
   .round { width: 40px; height: 40px; }
   .pills button { height: 40px; }
