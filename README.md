@@ -7,3 +7,5 @@ Não tem ligação com a nuvem da loja.
 - `src/` — o site publicado (index.html, app.js da 1.1.27 com ajustes marcados `WEB`, web.css, manifest, sw.js).
 - `fonte/` — camada de dados no navegador (`entrada.js`) e as regras originais usadas no pacote `src/dados.js`.
 - `npm run build` — gera `src/dados.js` e `src/sw.js`.
+
+Endereço: https://willamsdantas.github.io/retornei-web-teste/
