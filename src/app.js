@@ -1951,10 +1951,10 @@ ${api.pdf ? `<button class="btn primary" type="button" data-act="manual-pdf" sty
 
   function ajAparencia() {
     return `<section class="card panel"><div><h2>Aparência e WhatsApp</h2></div>
-      <div class="field"><span class="legend">Tema</span><div>${pills([['sistema', 'Igual ao Windows'], ['claro', 'Claro'], ['escuro', 'Escuro']], S.data.config.tema, 'tema', 'Tema')}</div></div>
-      <div class="field"><span class="legend">Abrir o WhatsApp no</span><div>${pills([['auto', 'Automático'], ['app', 'Aplicativo do computador'], ['web', 'Navegador']], S.data.config.whatsappModo || 'auto', 'wa-modo', 'WhatsApp')}</div>
+      <div class="field"><span class="legend">Tema</span><div>${pills([['sistema', api.web ? 'Igual ao aparelho' : 'Igual ao Windows'], ['claro', 'Claro'], ['escuro', 'Escuro']], S.data.config.tema, 'tema', 'Tema')}</div></div>
+      ${api.web ? '' : `<div class="field"><span class="legend">Abrir o WhatsApp no</span><div>${pills([['auto', 'Automático'], ['app', 'Aplicativo do computador'], ['web', 'Navegador']], S.data.config.whatsappModo || 'auto', 'wa-modo', 'WhatsApp')}</div>
         <span class="xs muted wrap">${S.info && S.info.whatsappApp ? 'O WhatsApp está instalado neste computador. No automático, o Retornei abre direto nele.' : 'Não encontrei o WhatsApp instalado neste computador. No automático, o Retornei abre o WhatsApp Web no navegador.'}</span></div>
-      <div class="field"><span class="legend">Menu lateral</span><div>${pills([['aberto', 'Aberto'], ['recolhido', 'Recolhido']], S.menuMin ? 'recolhido' : 'aberto', 'menu-modo', 'Menu')}</div></div></section>`;
+      <div class="field"><span class="legend">Menu lateral</span><div>${pills([['aberto', 'Aberto'], ['recolhido', 'Recolhido']], S.menuMin ? 'recolhido' : 'aberto', 'menu-modo', 'Menu')}</div></div>`}</section>`;
   }
 
   function estadoUpd() {
