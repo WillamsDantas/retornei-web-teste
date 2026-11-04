@@ -401,7 +401,7 @@
     }
     const views = { mais: viewMais, hoje: viewHoje, encomendas: viewEncomendas, clientes: viewClientes, relatorios: viewRelatorios, equipe: viewEquipe, ajustes: viewAjustes, ajuda: viewAjuda };
     const fab = celular() && ['hoje', 'encomendas', 'clientes'].includes(S.view) && !(S.view === 'hoje' && S.det); // WEB
-    patch(root, `<div class="app${celular() ? ' cel' : ''}">${sidebar()}<main class="main${topbar() ? '' : ' sem-topo'}" id="main">${topbar()}${views[S.view]()}</main>${celular() ? navBaixo() : ''}${fab ? (S.view === 'encomendas' ? `<button class="fab" type="button" data-act="novo">${ic('sino')}Avisar quando chegar</button>` : `<button class="fab" type="button" data-act="novo">${ic('plus')}Nova venda</button>`) : ''}</div>`);
+    patch(root, `<div class="app${celular() ? ' cel' : ''}">${sidebar()}<main class="main${topbar() ? '' : ' sem-topo'}" id="main">${topbar()}${views[S.view]()}</main>${celular() ? navBaixo() : ''}${fab ? (S.view === 'encomendas' ? `<button class="fab" type="button" data-act="novo">${ic('sino')}Avisar cliente</button>` : `<button class="fab" type="button" data-act="novo">${ic('plus')}Nova venda</button>`) : ''}</div>`);
     renderDrawer();
   }
   let TOUR_ADIADO = false;
