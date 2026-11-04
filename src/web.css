@@ -130,6 +130,11 @@ body.web { -webkit-tap-highlight-color: transparent; }
   .dialog .switches .pills button { flex: 1; justify-content: center; }
   .dialog .grid2, .dialog .grid3 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important; }
   .dialog .grid2 > *, .dialog .grid3 > *, .dialog .field { min-width: 0; }
+  /* atacado: um campo embaixo do outro; varejo: cupom e valor lado a lado, data inteira */
+  .dialog .box.emp .grid2, .dialog .grid2.at-linha { grid-template-columns: minmax(0, 1fr) !important; }
+  .dialog .grid3 > .field:nth-child(3) { grid-column: 1 / -1; }
+  .dialog .grid2[style*="120px"] { grid-template-columns: minmax(0, 1fr) !important; }
+  .dialog .grid2[style*="120px"] .qty { width: 140px; }
   .dialog .grid2:has(.chips), .dialog .grid3:has(.chips), .dialog .grid-vend { grid-template-columns: minmax(0, 1fr) !important; display: grid; gap: var(--sp-4); }
   .dialog .chips { display: flex; flex-direction: row; gap: var(--sp-2); }
   .dialog .chips { flex-wrap: wrap; }

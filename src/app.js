@@ -2278,9 +2278,9 @@ ${api.pdf ? `<button class="btn primary" type="button" data-act="manual-pdf" sty
       ${M.obsAberta ? `<div class="field"><label for="m-obs">Observação (opcional)</label><textarea class="textarea" id="m-obs" data-m="obs" rows="2" style="min-height: 64px" placeholder="Ex.: comprou para presente">${esc(M.obs)}</textarea></div>` : ''}`;
 
     const corpoAviso = `<div class="field"><label for="m-produto">Produto</label><input class="input" id="m-produto" data-m="produto" value="${esc(M.produto)}" placeholder="Ex.: Óleo de coco 500 ml" autocomplete="off" ${inv('produto')}>${err('produto')}<div id="m-sugs">${sugsHtml()}</div></div>
-      <div class="grid3" style="grid-template-columns:120px 180px minmax(0,1fr);align-items:start"><div class="field"><span class="legend">Quantidade</span><div class="qty"><button type="button" data-act="m-qtd" data-v="-1" aria-label="Menos">−</button><input id="m-qtd" data-m="quantidade" value="${M.quantidade}" inputmode="numeric" aria-label="Quantidade"><button type="button" data-act="m-qtd" data-v="1" aria-label="Mais">+</button></div></div>
-        ${vendSel}
-        <div class="field"><label for="m-obs">Observação (opcional)</label><input class="input" id="m-obs" data-m="obs" value="${esc(M.obs)}" placeholder="Ex.: prefere a marca X" autocomplete="off"></div></div>`;
+      <div class="grid2" style="grid-template-columns:120px minmax(0,1fr);align-items:start"><div class="field"><span class="legend">Quantidade</span><div class="qty"><button type="button" data-act="m-qtd" data-v="-1" aria-label="Menos">−</button><input id="m-qtd" data-m="quantidade" value="${M.quantidade}" inputmode="numeric" aria-label="Quantidade"><button type="button" data-act="m-qtd" data-v="1" aria-label="Mais">+</button></div></div>
+        ${vendSel}</div>
+      ${M.obsAberta ? `<div class="field"><label for="m-obs">Observação (opcional)</label><textarea class="textarea" id="m-obs" data-m="obs" rows="2" style="min-height: 64px" placeholder="Ex.: prefere a marca X">${esc(M.obs)}</textarea></div>` : ''}`;
 
     const pb = (act, v, cur, label, icon) => `<button type="button" role="radio" aria-checked="${cur === v}" data-act="${act}" data-v="${v}">${icon ? ic(icon, 'ic-16') : ''}${label}</button>`;
     patch(root, `<div class="overlay${fx ? ' fx' : ''}" data-act="modal-fora"><section class="dialog" role="dialog" aria-modal="true" aria-labelledby="m-t">
@@ -2292,7 +2292,7 @@ ${api.pdf ? `<button class="btn primary" type="button" data-act="manual-pdf" sty
         ${blocoCliente}`}
         ${venda ? corpoVenda : corpoAviso}
       </div>
-      <footer>${venda && !M.obsAberta ? '<button type="button" class="link blue" data-act="m-obs">Adicionar observação</button>' : '<span></span>'}
+      <footer>${!M.obsAberta ? '<button type="button" class="link blue" data-act="m-obs">Adicionar observação</button>' : '<span></span>'}
         <div class="right"><button type="button" class="btn ghost" data-act="modal-fechar">Cancelar</button><button type="submit" class="btn primary lg" ${M.salvando ? 'disabled' : ''}>Salvar</button></div></footer></form>
     </section></div>`);
   }
