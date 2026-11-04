@@ -6,6 +6,10 @@ body.web { -webkit-tap-highlight-color: transparent; }
 .overlay, .drawer { padding-top: max(env(safe-area-inset-top), 0px); }
 .web-av, .det-topo, .det-scrim, .bnav, .fab { display: none; }
 
+/* pedidos: o cliente abre a ficha */
+.erow .meta[data-act="cliente"] { cursor: pointer; }
+@media (hover: hover) { .erow .meta[data-act="cliente"]:hover b { color: var(--ptext); } }
+
 /* toque: alvos maiores em qualquer tela de toque */
 @media (pointer: coarse) {
   /* sem barra de rolagem piscando na lateral (no toque ela não serve para nada) */
@@ -122,6 +126,10 @@ body.web { -webkit-tap-highlight-color: transparent; }
   .trow.g-cli > :nth-child(1) { grid-row: 1 / 3; align-self: center; }
   .erow { padding: var(--sp-3) var(--sp-4); }
   .enc-head { padding: var(--sp-4); align-items: center; }
+  /* avisado: nome inteiro em cima, situação e Comprou/Desistiu embaixo */
+  .erow:has([data-act="enc-comprou"]) { flex-wrap: wrap; row-gap: var(--sp-2); }
+  .erow:has([data-act="enc-comprou"]) .meta { flex: 1 1 100%; }
+  .erow:has([data-act="enc-comprou"]) .dot-st { flex: 1; }
   .page-head [data-act="novo-aviso"] { display: none; }
 
   /* janelas (Nova venda, editar etc.) em tela cheia */
@@ -152,6 +160,15 @@ body.web { -webkit-tap-highlight-color: transparent; }
   .overlay[style*="align-items:center"] { padding: var(--sp-4); }
   .drawer { width: 100%; }
   .drawer .dh, .drawer .db { padding-left: var(--sp-4); padding-right: var(--sp-4); }
+  /* ficha: números do resumo sem cortar */
+  .drawer .kv > div + div { padding-left: var(--sp-3); }
+  .drawer .kv .v { font-size: var(--fs-14); line-height: 20px; }
+  /* ficha: linhas com data em cima e situação/ações embaixo, sem sobrepor */
+  .drawer .mini .li { flex-wrap: wrap; row-gap: var(--sp-1); padding-top: var(--sp-3); padding-bottom: var(--sp-3); }
+  .drawer .mini .li .meta { flex: 1 1 100%; }
+  .drawer .mini .li .dot-st { flex: 1; }
+  .drawer .mini .li:not(:has(.dot-st)) { flex-wrap: nowrap; }
+  .drawer .mini .li:not(:has(.dot-st)) .meta { flex: 1 1 auto; }
 
   /* avisos acima da barra de baixo */
   .toasts { left: 50%; bottom: calc(88px + env(safe-area-inset-bottom)); width: calc(100% - 32px); }

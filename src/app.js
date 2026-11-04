@@ -1196,7 +1196,7 @@ ${api.pdf ? `<button class="btn primary" type="button" data-act="manual-pdf" sty
       const rows = encerradas.sort((a, b) => (a.encerradoEm < b.encerradoEm ? 1 : -1)).slice(0, 300);
       return `<div class="page">${head}${rows.length ? `<section class="card">${rows.map((e) => {
         const c = cli.get(e.clienteId);
-        return `<div class="erow"><div class="meta"><b>${esc(nomeCli(c))} · ${esc(e.produto)}</b><span>Pediu em ${esc(R.formatDate(R.localDay(e.criadoEm), 'curta'))} · encerrado em ${esc(R.formatDate(R.localDay(e.encerradoEm), 'curta'))} · ${esc(R.firstName(vendNome(e.vendedorId)))}</span></div>
+        return `<div class="erow"><div class="meta" data-act="cliente" data-id="${c.id}" role="button" tabindex="0" title="Ver ficha do cliente"><b>${esc(nomeCli(c))} · ${esc(e.produto)}</b><span>Pediu em ${esc(R.formatDate(R.localDay(e.criadoEm), 'curta'))} · encerrado em ${esc(R.formatDate(R.localDay(e.encerradoEm), 'curta'))} · ${esc(R.firstName(vendNome(e.vendedorId)))}</span></div>
           <span class="dot-st"><span class="dot ${e.status === 'comprou' ? 'green' : ''}"></span>${e.status === 'comprou' ? 'Comprou' : 'Desistiu'}</span><button class="link blue" type="button" data-act="enc-reabrir" data-id="${e.id}" style="margin-left: var(--sp-3)">Reabrir</button></div>`;
       }).join('')}</section>` : '<div class="card empty"><p>Nenhum pedido encerrado ainda.</p></div>'}</div>`;
     }
@@ -1233,7 +1233,7 @@ ${api.pdf ? `<button class="btn primary" type="button" data-act="manual-pdf" sty
     } else {
       acts = `<span class="dot-st"><span class="dot blue"></span>Avisado<span class="s">· ${esc(R.relativeDay(R.localDay(e.avisadoEm), S.today))}</span></span><button class="btn" type="button" data-act="enc-comprou" data-id="${e.id}">Comprou</button><button class="link" type="button" data-act="enc-desistiu" data-id="${e.id}">Desistiu</button>`;
     }
-    return `<div class="erow"><div class="meta"><b>${esc(nomeCli(c))}${e.quantidade > 1 ? ` · ${e.quantidade} un.` : ''}</b><span>${esc(sub)}</span></div>${acts}</div>`;
+    return `<div class="erow"><div class="meta" data-act="cliente" data-id="${c.id}" role="button" tabindex="0" title="Ver ficha do cliente"><b>${esc(nomeCli(c))}${e.quantidade > 1 ? ` · ${e.quantidade} un.` : ''}</b><span>${esc(sub)}</span></div>${acts}</div>`;
   }
 
   // ============================================================ CLIENTES
@@ -1394,7 +1394,7 @@ ${api.pdf ? `<button class="btn primary" type="button" data-act="manual-pdf" sty
       <div class="dh"><span class="avatar lg" data-nome="${esc(nomeCli(c))}" data-tom="${tomDe(nomeCli(c))}">${esc(R.initials(nomeCli(c)))}</span><div style="flex:1;min-width:0;display:flex;flex-direction:column"><h2 id="dr-t" class="ell">${esc(nomeCli(c))}</h2><span class="small muted ell">${esc(R.formatPhone(c.celular))}${subCli(c) ? ` · ${esc(subCli(c))}` : ''} · ${c.tipo === 'atacado' ? 'Atacado' : 'Varejo'}</span></div>
         <button class="round" type="button" data-act="drawer-fechar" aria-label="Fechar" title="Fechar (Esc)">${ic('x', 'ic-20')}</button></div>
       <div class="db">
-        <div class="ficha-acoes"><button class="btn wa" type="button" data-act="cli-wa">${WA()}Abrir conversa</button><button class="btn" type="button" data-act="cli-venda">${ic('sacola', 'ic-16')}Nova venda</button><button class="btn" type="button" data-act="cli-aviso">${ic('sino', 'ic-16')}Avisar quando chegar</button></div>
+        <div class="ficha-acoes"><button class="btn wa" type="button" data-act="cli-wa">${WA()}Abrir conversa</button><button class="btn" type="button" data-act="cli-venda">${ic('sacola', 'ic-16')}Nova venda</button><button class="btn" type="button" data-act="cli-aviso">${ic('sino', 'ic-16')}Avisar cliente</button></div>
         <div class="kv"><div><span class="k">Compras</span><span class="v">${vendas.length}</span></div><div><span class="k">Total</span><span class="v">${esc(R.formatMoney(total))}</span></div><div><span class="k">Cliente desde</span><span class="v">${esc(R.formatDate(vendas.length ? vendas.reduce((m, v) => (v.data < m ? v.data : m), vendas[0].data) : R.localDay(c.criadoEm)))}</span></div></div>
 
         <section class="sec"><h3>Próximos contatos</h3>${lems.length ? `<div class="mini">${lems.map((x) => `<div class="li"><div class="meta"><b>${esc(R.formatDate(x.l.data))}</b><span>${x.l.tentativa ? `2ª tentativa · compra de ${esc(R.formatDate(x.v.data, 'curta'))}` : `${x.l.dias} dias após a compra de ${esc(R.formatDate(x.v.data, 'curta'))}`}</span></div>${dotSt(x, false)}
