@@ -1155,8 +1155,7 @@ ${api.pdf ? `<button class="btn primary" type="button" data-act="manual-pdf" sty
         <button class="btn wa lg" type="button" data-act="wa" data-id="${sel.l.id}">${WA(true)}Enviar no WhatsApp</button>
         <div class="detail-acts"><button class="link blue" type="button" data-act="feito" data-id="${sel.l.id}">${ic('check', 'ic-16')}Já falei</button>
           <button class="link" type="button" data-act="adiar" data-id="${sel.l.id}">${ic('clock', 'ic-16')}Amanhã</button>
-          ${naFila ? `<button class="link" type="button" data-act="pular" data-id="${sel.l.id}" ${pend.length < 2 ? 'disabled' : ''}>${ic('pular', 'ic-16')}Pular</button>` : ''}</div>
-        <p class="xs muted" style="text-align:center">Ao enviar, o contato fica marcado como feito. Dá para desfazer.</p></aside>`}`;
+          ${naFila ? `<button class="link" type="button" data-act="pular" data-id="${sel.l.id}" ${pend.length < 2 ? 'disabled' : ''}>${ic('pular', 'ic-16')}Pular</button>` : ''}</div></aside>`}`;
     }
     return `<div class="page">${head}<div class="hoje-grid${S.det && sel ? ' det' : ''}"><div class="list">${corpo}${blocoFeitos}</div>${S.det && sel ? '<div class="det-scrim" data-act="det-fechar"></div>' : ''}${detalhe}</div></div>`;
   }
@@ -2191,7 +2190,7 @@ ${api.pdf ? `<button class="btn primary" type="button" data-act="manual-pdf" sty
     if (!R.parseISO(M.data) || !M.dias.length) return '';
     const ds = R.normalizeDias(M.dias).map((n) => R.formatDate(R.addDays(M.data, n), 'curta'));
     const txt = ds.length === 1 ? ds[0] : `${ds.slice(0, -1).join(', ')} e ${ds[ds.length - 1]}`;
-    return `${ic('clock', 'ic-16')}${M.tipo === 'atacado' ? 'Chama de novo em' : 'O Retornei chama esse cliente em'} ${txt}.`;
+    return `${ic('clock', 'ic-16')}Retorno em ${txt}`;
   }
 
   function diasHtml() {
@@ -2278,8 +2277,7 @@ ${api.pdf ? `<button class="btn primary" type="button" data-act="manual-pdf" sty
         <div class="field"><label for="m-valor">Valor</label><div class="prefix"><span>R$</span><input class="input" id="m-valor" data-m="valor" value="${esc(M.valor)}" placeholder="0,00" inputmode="numeric" autocomplete="off" ${inv('valor')}></div>${err('valor')}</div>
         <div class="field"><label for="m-data">Data da compra</label>${campoData(!!e.data)}${err('data')}</div></div>
       <div class="grid-vend">${vendSel}
-        <div class="field"><span class="legend">Chamar de novo em</span><div class="chips" id="m-dias">${diasHtml()}</div>${err('dias')}</div></div>`}
-      ${at ? '' : `<p class="hint" id="m-prev">${prevLembretes()}</p>`}
+        <div class="field"><span class="legend">Chamar de novo em</span><div class="chips" id="m-dias">${diasHtml()}</div><p class="hint" id="m-prev">${prevLembretes()}</p>${err('dias')}</div></div>`}
       ${M.obsAberta ? `<div class="field"><label for="m-obs">Observação (opcional)</label><textarea class="textarea" id="m-obs" data-m="obs" rows="2" style="min-height: 64px" placeholder="Ex.: comprou para presente">${esc(M.obs)}</textarea></div>` : ''}`;
 
     const corpoAviso = `<div class="field"><label for="m-produto">Produto</label><input class="input" id="m-produto" data-m="produto" value="${esc(M.produto)}" placeholder="Ex.: Óleo de coco 500 ml" autocomplete="off" ${inv('produto')}>${err('produto')}<div id="m-sugs">${sugsHtml()}</div></div>

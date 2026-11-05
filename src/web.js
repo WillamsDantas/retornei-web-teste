@@ -7,7 +7,11 @@
     const r = el.getBoundingClientRect();
     const vw = document.documentElement.clientWidth;
     let dx = 0;
-    if (r.left < 12) dx = 12 - r.left;
+    // lista alinhada à direita do botão, mas o botão desceu para a esquerda (tablet): alinha pela esquerda do botão
+    const bt = el.classList.contains('right') && el.parentElement && el.parentElement.querySelector('.dd-btn');
+    const br = bt && bt.getBoundingClientRect();
+    if (br && br.left < vw / 2 && br.left + r.width <= vw - 12) dx = br.left - r.left;
+    else if (r.left < 12) dx = 12 - r.left;
     else if (r.right > vw - 12) dx = vw - 12 - r.right;
     if (dx) el.style.translate = `${Math.round(dx)}px 0`;
   });
