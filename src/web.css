@@ -249,3 +249,7 @@ body.web { -webkit-tap-highlight-color: transparent; }
 
 /* impressão e PDF: sem a barra de baixo e o botão flutuante */
 @media print { .bnav, .fab, .det-scrim { display: none !important; } .app.cel .main { padding-bottom: 0; } }
+
+/* caixa Empresa: entre as linhas de campos, o mesmo espaço do resto do formulário (12 px) */
+.box.emp .grid2 + .grid2 { margin-top: var(--sp-1); }
+.dialog .box.emp .grid2 { row-gap: var(--sp-3); }
