@@ -1,7 +1,9 @@
 // Guarda os arquivos do app para abrir sem internet. A versão muda a cada publicação.
 const VERSAO = '__VERSAO__';
 const ARQUIVOS = __ARQUIVOS__;
-self.addEventListener('install', (e) => { e.waitUntil(caches.open(VERSAO).then((c) => c.addAll(ARQUIVOS)).then(() => self.skipWaiting())); });
+self.addEventListener('install', (e) => { e.waitUntil(caches.open(VERSAO).then((c) => c.addAll(ARQUIVOS))); });
+// a versão nova fica esperando até a pessoa tocar em "Atualizar"
+self.addEventListener('message', (e) => { if (e.data === 'ativar') self.skipWaiting(); });
 self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== VERSAO).map((k) => caches.delete(k)))).then(() => self.clients.claim())); });
 self.addEventListener('fetch', (e) => {
   const u = new URL(e.request.url);

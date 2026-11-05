@@ -1,9 +1,10 @@
 {
   "name": "retornei-web-teste",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.0.1",
   "scripts": {
-    "build": "esbuild fonte/entrada.js --bundle --format=iife --platform=browser --alias:fs=./fonte/vazio.js --alias:path=./fonte/vazio.js --outfile=src/dados.js && node fonte/gerar-sw.js"
+    "build": "esbuild fonte/entrada.js --bundle --format=iife --platform=browser --alias:fs=./fonte/vazio.js --alias:path=./fonte/vazio.js --outfile=src/dados.js && node fonte/gerar-sw.js",
+    "publicar": "npm version patch --no-git-tag-version && npm run build"
   },
   "devDependencies": {
     "esbuild": "^0.24.0"

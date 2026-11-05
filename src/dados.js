@@ -1501,7 +1501,19 @@
       window.open(`https://wa.me/${m[1] || ""}`, "_blank", "noopener");
       return ok(true);
     },
-    info: async () => ok({ versao: "teste web", pasta: "Este aparelho", backups: 0, ultimaCopia: 0 }),
+    info: async () => ok({ versao: await versaoAtual(), pasta: "Este aparelho", backups: 0, ultimaCopia: 0 }),
+    // atualização: mesma tela do Windows ("Atualização disponível" · Atualizar / Depois)
+    updEstado: async () => ok({ estado: UPD.estado, versao: UPD.versao }),
+    aoUpd: (fn) => {
+      UPD.ouvintes.push(fn);
+    },
+    updInstalar: async () => {
+      const w = UPD.reg && UPD.reg.waiting;
+      UPD.pedido = true;
+      if (w) w.postMessage("ativar");
+      else location.reload();
+      return ok(true);
+    },
     tema: async () => ok(true),
     imprimir: async () => {
       window.print();
@@ -1526,6 +1538,75 @@
       }, 50);
     })
   };
+  var UPD = { estado: "nenhum", versao: "", ouvintes: [], reg: null, pedido: false };
+  var numero = (k) => {
+    const m = /-(\d+)\.(\d+)\.(\d+)-/.exec(k);
+    return m ? [+m[1], +m[2], +m[3]] : [0, 0, 0];
+  };
+  function rotulo(nome) {
+    const m = /^retornei-(teste|web)-(\d+\.\d+\.\d+)-/.exec(nome || "");
+    return m ? (m[1] === "teste" ? "Beta " : "") + m[2] : "";
+  }
+  async function versoes() {
+    try {
+      const ks = (await caches.keys()).filter((k) => /^retornei-/.test(k));
+      return ks.sort((a, b) => {
+        const x = numero(a), y = numero(b);
+        return x[0] - y[0] || x[1] - y[1] || x[2] - y[2];
+      });
+    } catch (_) {
+      return [];
+    }
+  }
+  async function versaoAtual() {
+    const v = await versoes();
+    return rotulo(v[0]) || "Beta";
+  }
+  async function avisarNova() {
+    if (UPD.estado === "pronto") return;
+    const v = await versoes();
+    UPD.estado = "pronto";
+    UPD.versao = rotulo(v[v.length - 1]) || "nova";
+    const mostrar = () => UPD.ouvintes.forEach((fn) => fn({ estado: UPD.estado, versao: UPD.versao }));
+    if (!document.querySelector(".overlay")) return mostrar();
+    const obs = new MutationObserver(() => {
+      if (!document.querySelector(".overlay")) {
+        obs.disconnect();
+        mostrar();
+      }
+    });
+    obs.observe(document.body, { childList: true, subtree: true });
+  }
+  if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (UPD.pedido) location.reload();
+    });
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("sw.js").then((reg) => {
+        UPD.reg = reg;
+        const esperando = () => {
+          if (reg.waiting && navigator.serviceWorker.controller) avisarNova();
+        };
+        esperando();
+        reg.addEventListener("updatefound", () => {
+          const w = reg.installing;
+          if (w) w.addEventListener("statechange", () => {
+            if (w.state === "installed") esperando();
+          });
+        });
+        let ultima = Date.now();
+        const conferir = () => {
+          if (document.visibilityState !== "visible" || Date.now() - ultima < 15 * 60 * 1e3) return;
+          ultima = Date.now();
+          reg.update().catch(() => {
+          });
+        };
+        document.addEventListener("visibilitychange", conferir);
+        setInterval(conferir, 15 * 60 * 1e3);
+      }).catch(() => {
+      });
+    });
+  }
   window.RetorneiTeste = {
     recomecar() {
       try {

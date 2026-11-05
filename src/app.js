@@ -778,7 +778,7 @@ ${api.pdf ? `<button class="btn primary" type="button" data-act="manual-pdf" sty
   let UA = null; // { fase: 'pergunta' | 'baixando' | 'ok' | 'erro', versao, atual, pr }
   let uaVista = false;
   function uaAoAbrir(u) {
-    if (uaVista || !u || !u.versao || Date.now() - ABERTO_EM > 8000) return;
+    if (uaVista || !u || !u.versao || (!api.web && Date.now() - ABERTO_EM > 8000)) return;
     if (u.estado !== 'baixando' && u.estado !== 'pronto') return;
     uaVista = true;
     UA = { fase: 'pergunta', versao: u.versao, atual: '', pr: 0 };
@@ -801,7 +801,7 @@ ${api.pdf ? `<button class="btn primary" type="button" data-act="manual-pdf" sty
     if (!UA) { patch(root, ''); return; }
     const f = UA.fase;
     const corpo = f === 'pergunta'
-      ? `<div class="ua-tt"><h1 id="ua-t">Atualização disponível</h1><p>Versão ${esc(UA.versao)}</p></div>
+      ? `<div class="ua-tt"><h1 id="ua-t">Atualização disponível</h1>${api.web ? '' : `<p>Versão ${esc(UA.versao)}</p>`}</div>
         <button class="btn primary lg ua-bt" type="button" id="ua-ok" data-act="ua-atualizar">Atualizar</button><button class="link ua-dp" type="button" data-act="ua-depois">Depois</button>`
       : f === 'erro'
         ? `<div class="ua-tt"><h1 id="ua-t">Não deu para atualizar agora</h1><p>Confira a internet. A versão nova entra quando o Retornei fechar.</p></div>

@@ -1,39 +1,5 @@
 // Retornei web: instala como app (PWA) e funciona sem internet depois de aberto uma vez.
 'use strict';
-if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
-  // Atualiza sozinho: confere ao abrir e ao voltar para o app (no máximo a cada 15 min; só baixa um arquivo pequeno).
-  // Quando há versão nova, recarrega uma vez — mas nunca com uma janela aberta, para não perder o que está sendo digitado.
-  const tinhaVersao = !!navigator.serviceWorker.controller;
-  let pendente = false;
-  let ultima = Date.now();
-  const recarregar = () => {
-    if (document.querySelector('.overlay')) {
-      // janela aberta: espera ela fechar e então recarrega
-      if (!pendente) {
-        pendente = true;
-        const obs = new MutationObserver(() => { if (!document.querySelector('.overlay')) { obs.disconnect(); recarregar(); } });
-        obs.observe(document.body, { childList: true, subtree: true });
-      }
-      return;
-    }
-    pendente = false;
-    location.reload();
-  };
-  navigator.serviceWorker.addEventListener('controllerchange', () => { if (tinhaVersao) recarregar(); });
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').then((reg) => {
-      const conferir = () => {
-        if (document.visibilityState !== 'visible') return;
-        if (Date.now() - ultima < 15 * 60 * 1000) return;
-        ultima = Date.now();
-        reg.update().catch(() => {});
-      };
-      document.addEventListener('visibilitychange', conferir);
-      setInterval(conferir, 15 * 60 * 1000);
-    }).catch(() => {});
-  });
-}
-
 // listas e calendário abertos perto da borda: empurra para dentro da tela
 (function () {
   const ajustar = () => document.querySelectorAll('.dd-list, .cal').forEach((el) => {
