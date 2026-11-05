@@ -735,9 +735,9 @@
           }
           return pares;
         }
-        function opsDaCopia(copia, data) {
-          const naCopia = new Set(copia.map((d) => d[0]));
-          const ops = copia.map(([k, dados]) => ({ chave: k, dados }));
+        function opsDaCopia(copia2, data) {
+          const naCopia = new Set(copia2.map((d) => d[0]));
+          const ops = copia2.map(([k, dados]) => ({ chave: k, dados }));
           for (const k of docsLocais(data).keys()) if (!naCopia.has(k) && !k.startsWith(`meta${SEP}`)) ops.push({ chave: k, dados: null });
           return ops;
         }
@@ -970,11 +970,11 @@
            * Restaura uma cópia da nuvem: os registros ficam como na cópia. Não marca como enviado,
            * então a diferença sobe sozinha para a nuvem e chega aos outros computadores.
            */
-          restaurarCopia({ copia }) {
+          restaurarCopia({ copia: copia2 }) {
             if (!D().nuvem) throw new AppError2("Este computador n\xE3o est\xE1 ligado \xE0 loja.");
-            if (!Array.isArray(copia) || !copia.length) throw new AppError2("Essa c\xF3pia est\xE1 vazia.");
+            if (!Array.isArray(copia2) || !copia2.length) throw new AppError2("Essa c\xF3pia est\xE1 vazia.");
             store2.backupComo("antes-de-restaurar");
-            Sync.aplicar(D(), Sync.opsDaCopia(copia, D()));
+            Sync.aplicar(D(), Sync.opsDaCopia(copia2, D()));
             return commit();
           },
           /** Marca o que já chegou na nuvem. */
@@ -1480,7 +1480,8 @@
     store.data = emptyData(R);
     semear(svc, store);
   }
-  var ok = (data) => ({ ok: true, data });
+  var copia = (d) => d && typeof d === "object" ? typeof structuredClone === "function" ? structuredClone(d) : JSON.parse(JSON.stringify(d)) : d;
+  var ok = (data) => ({ ok: true, data: copia(data) });
   var fail = (e) => ({ ok: false, error: e instanceof AppError ? e.message : "Algo deu errado. Tente de novo.", fields: e && e.fields });
   window.api = {
     web: true,

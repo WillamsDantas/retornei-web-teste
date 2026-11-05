@@ -79,7 +79,9 @@ const store = new StoreWeb();
 const svc = makeService(store, R);
 if (store.novo || !store.data.vendedores.length) { store.data = emptyData(R); semear(svc, store); }
 
-const ok = (data) => ({ ok: true, data });
+// cópia, como no app do Windows (lá os dados atravessam o IPC): a tela reconhece que os dados mudaram
+const copia = (d) => (d && typeof d === 'object' ? (typeof structuredClone === 'function' ? structuredClone(d) : JSON.parse(JSON.stringify(d))) : d);
+const ok = (data) => ({ ok: true, data: copia(data) });
 const fail = (e) => ({ ok: false, error: e instanceof AppError ? e.message : 'Algo deu errado. Tente de novo.', fields: e && e.fields });
 
 window.api = {
