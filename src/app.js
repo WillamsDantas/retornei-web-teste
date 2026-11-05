@@ -837,7 +837,7 @@ ${api.pdf ? `<button class="btn primary" type="button" data-act="manual-pdf" sty
 
   function ddDados(id) {
     if (id === 'm-vend') return { cur: M ? M.vendedorId : '', ph: 'Escolha o vendedor', opts: vendAtivos().map((v) => ({ v: v.id, l: v.nome, ini: R.initials(v.nome) })) };
-    if (id === 'filtro-vend') return { cur: S.filtroVend, opts: [{ v: '', l: 'Todos os vendedores', icon: 'clientes' }].concat(S.data.vendedores.filter((v) => !v.excluido).map((v) => ({ v: v.id, l: v.nome + (v.ativo ? '' : ' (inativo)'), ini: R.initials(v.nome) }))) };
+    if (id === 'filtro-vend') return { cur: S.filtroVend, opts: [{ v: '', l: 'Todos os vendedores', lb: 'Vendedores', icon: 'clientes' }].concat(S.data.vendedores.filter((v) => !v.excluido).map((v) => ({ v: v.id, l: v.nome + (v.ativo ? '' : ' (inativo)'), ini: R.initials(v.nome) }))) };
     if (id === 'm-doctipo' || id === 'ce-doctipo') {
       const cur = id === 'm-doctipo' ? (M ? R.docTipoDe(M.docTipo) : 'cnpj') : R.docTipoDe(S.cliEdit && S.cliEdit.docTipo);
       return { cur, opts: [{ v: 'cnpj', l: 'CNPJ', sub: 'Empresa · 14 números' }, { v: 'cpf', l: 'CPF', sub: 'Pessoa física · 11 números' }] };
@@ -846,7 +846,7 @@ ${api.pdf ? `<button class="btn primary" type="button" data-act="manual-pdf" sty
       const cur = id === 'm-modelo' ? (M ? modeloM() : '55') : (EV ? EV.modelo : '');
       return { cur, opts: [{ v: '55', l: 'NF-e 55', sub: 'Nota fiscal eletrônica' }, { v: '65', l: 'NFC-e 65', sub: 'Cupom fiscal do consumidor' }] };
     }
-    if (id === 'rel-vend') return { cur: S.relVend, opts: [{ v: '', l: 'Todos os vendedores', icon: 'clientes' }].concat(S.data.vendedores.filter((v) => !v.excluido).map((v) => ({ v: v.id, l: v.nome + (v.ativo ? '' : ' (inativo)'), ini: R.initials(v.nome) }))) };
+    if (id === 'rel-vend') return { cur: S.relVend, opts: [{ v: '', l: 'Todos os vendedores', lb: 'Vendedores', icon: 'clientes' }].concat(S.data.vendedores.filter((v) => !v.excluido).map((v) => ({ v: v.id, l: v.nome + (v.ativo ? '' : ' (inativo)'), ini: R.initials(v.nome) }))) };
     if (id === 'aviso-hora') {
       const hs = [];
       for (let h = 6; h <= 12; h++) for (const m of ['00', '30']) hs.push(`${String(h).padStart(2, '0')}:${m}`);
@@ -858,7 +858,7 @@ ${api.pdf ? `<button class="btn primary" type="button" data-act="manual-pdf" sty
     if (id === 'imp-vend' && I) return { cur: I.vendPadrao, ph: 'Escolha o vendedor', opts: vendAtivos().map((v) => ({ v: v.id, l: v.nome, ini: R.initials(v.nome) })) };
     if (id.startsWith('imp-') && I) return { cur: I.mapa[Number(id.slice(4))] || '', opts: R.CAMPOS_IMPORT.map(([v, l]) => ({ v, l })) };
     if (id === 'cli-origem') return { cur: S.origem, opts: [{ v: '', l: 'Todas as origens' }, { v: 'balcao', l: 'Cadastrados no balcão' }, { v: 'planilha', l: 'Importados da planilha' }] };
-    if (id === 'filtro-tipo') return { cur: S.filtroTipo, opts: [{ v: '', l: 'Todos os tipos', icon: 'clientes' }, { v: 'varejo', l: 'Varejo', icon: 'sacola' }, { v: 'atacado', l: 'Atacado', icon: 'equipe' }] };
+    if (id === 'filtro-tipo') return { cur: S.filtroTipo, opts: [{ v: '', l: 'Todos os tipos', lb: 'Tipos', icon: 'clientes' }, { v: 'varejo', l: 'Varejo', icon: 'sacola' }, { v: 'atacado', l: 'Atacado', icon: 'equipe' }] };
     return { cur: '', opts: [] };
   }
 
@@ -868,7 +868,7 @@ ${api.pdf ? `<button class="btn primary" type="button" data-act="manual-pdf" sty
     const open = DD.open === id;
     const atual = d.opts.find((x) => x.v === d.cur);
     const marca = (x, hi) => (x.ini ? `<span class="dd-ini${hi ? ' hi' : ''}">${esc(x.ini)}</span>` : x.icon ? `<span class="dd-ico">${ic(x.icon, 'ic-16')}</span>` : '');
-    const label = atual ? `<span class="dd-val">${opt.pill ? '' : marca(atual)}<span class="ell">${esc(atual.l)}</span></span>` : `<span class="dd-ph">${esc(d.ph || 'Escolha')}</span>`;
+    const label = atual ? `<span class="dd-val">${opt.pill ? '' : marca(atual)}<span class="ell">${esc(atual.lb || atual.l)}</span></span>` : `<span class="dd-ph">${esc(d.ph || 'Escolha')}</span>`;
     const lista = open
       ? `<div class="dd-list${opt.right ? ' right' : ''}" role="listbox">${d.opts.map((x, i) => `<button type="button" role="option" class="dd-item${i === DD.idx ? ' hi' : ''}${x.v === d.cur ? ' on' : ''}" aria-selected="${x.v === d.cur}" data-act="dd-pick" data-dd="${id}" data-v="${esc(x.v)}">${marca(x, i === DD.idx)}<span class="grow" style="display:flex;flex-direction:column;min-width:0"><span class="ell">${esc(x.l)}</span>${x.sub ? `<span class="dd-sub">${esc(x.sub)}</span>` : ''}</span>${x.v === d.cur ? ic('check', 'ic-16') : ''}</button>`).join('')}
           <span class="dd-hint">↑ ↓ para escolher · Enter confirma</span></div>`
@@ -1190,7 +1190,7 @@ ${api.pdf ? `<button class="btn primary" type="button" data-act="manual-pdf" sty
 
     const head = `<div class="page-head"><div class="t"><h1>Pedidos</h1><span class="sub">${plural(new Set(esperando.map((e) => e.clienteId)).size, 'cliente esperando', 'clientes esperando')} · ${plural(lista.filter((g) => g.esperando.length).length, 'produto', 'produtos')}</span></div><div class="grow"></div>
       ${pills([['abertas', `Abertos · ${abertas.length}`], ['encerradas', `Encerrados · ${encerradas.length}`]], S.encTab, 'enc-tab', 'Situação')}
-      <button class="btn" type="button" data-act="novo-aviso">${ic('sino', 'ic-16')}Avisar quando chegar</button></div>`;
+      <button class="btn" type="button" data-act="novo-aviso">${ic('sino', 'ic-16')}Avisar cliente</button></div>`;
 
     if (S.encTab === 'encerradas') {
       const rows = encerradas.sort((a, b) => (a.encerradoEm < b.encerradoEm ? 1 : -1)).slice(0, 300);
@@ -1203,8 +1203,8 @@ ${api.pdf ? `<button class="btn primary" type="button" data-act="manual-pdf" sty
 
     if (!lista.length) {
       return `<div class="page">${head}<div class="card empty"><div class="ico">${ic('pedidos', 'ic-24')}</div><h3>${q ? 'Nada encontrado' : 'Nenhum cliente esperando produto'}</h3>
-        <p class="wrap">Quando um cliente pedir algo que está em falta, cadastre em "Avisar quando chegar". Quando o produto chegar, você avisa todos de uma vez.</p>
-        <button class="btn primary lg" type="button" data-act="novo-aviso">${ic('sino', 'ic-16')}Avisar quando chegar</button></div></div>`;
+        <p class="wrap">Quando um cliente pedir algo que está em falta, cadastre em "Avisar cliente". Quando o produto chegar, você avisa todos de uma vez.</p>
+        <button class="btn primary lg" type="button" data-act="novo-aviso">${ic('sino', 'ic-16')}Avisar cliente</button></div></div>`;
     }
 
     const grupo = (g) => {

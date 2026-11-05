@@ -253,3 +253,7 @@ body.web { -webkit-tap-highlight-color: transparent; }
 /* caixa Empresa: entre as linhas de campos, o mesmo espaço do resto do formulário (12 px) */
 .box.emp .grid2 + .grid2 { margin-top: var(--sp-1); }
 .dialog .box.emp .grid2 { row-gap: var(--sp-3); }
+
+/* pedidos: o X de "cliente desistiu" alinhado à borda do botão Chegou (a área de toque continua inteira) */
+.erow .round[data-act="enc-desistiu"] { margin-right: -8px; }
+@media (pointer: coarse) { .erow .round[data-act="enc-desistiu"] { margin-right: -12px; } }
