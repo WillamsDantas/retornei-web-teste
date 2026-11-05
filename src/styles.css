@@ -196,7 +196,8 @@ h1 { font-size: var(--fs-24); line-height: 32px; font-weight: 400; }
 .pills button { height: 32px; padding: 0 var(--sp-4); border: 0; background: transparent; color: var(--l2); font-size: var(--fs-13); line-height: 20px; display: inline-flex; align-items: center; gap: var(--sp-2); }
 .pills button + button { border-left: 1px solid var(--line); }
 .pills button:hover { color: var(--label); }
-.pills button[aria-selected='true'], .pills button[aria-checked='true'] { background: var(--tint); color: var(--on-tint); font-weight: 500; }
+/* destaque sem mudar a largura (o peso da letra alargava o botão e empurrava os vizinhos) */
+.pills button[aria-selected='true'], .pills button[aria-checked='true'] { background: var(--tint); color: var(--on-tint); -webkit-text-stroke: 0.25px currentColor; }
 .pills.full { display: flex; width: 100%; }
 .pills.full button { flex: 1; justify-content: center; }
 

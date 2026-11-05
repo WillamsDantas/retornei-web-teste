@@ -1,5 +1,5 @@
 // Guarda os arquivos do app para abrir sem internet. A versão muda a cada publicação.
-const VERSAO = 'retornei-teste-0.0.4-24550bdb';
+const VERSAO = 'retornei-teste-0.0.5-5be74aaf';
 const ARQUIVOS = ["./ajuda-conteudo.js","./app.js","./dados.js","./fonts/inter-latin-ext-wght-normal.woff2","./fonts/inter-latin-wght-normal.woff2","./icon.png","./icones/apple-180.png","./icones/icone-192.png","./icones/icone-512.png","./icones/maskable-512.png","./index.html","./manifest.webmanifest","./morphdom.min.js","./rules.js","./styles.css","./sync.js","./web.css","./web.js","./"];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(VERSAO).then((c) => c.addAll(ARQUIVOS))); });
 // a versão nova fica esperando até a pessoa tocar em "Atualizar"
