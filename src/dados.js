@@ -1594,13 +1594,14 @@
             if (w.state === "installed") esperando();
           });
         });
-        let ultima = Date.now();
+        let ultima = 0;
         const conferir = () => {
-          if (document.visibilityState !== "visible" || Date.now() - ultima < 15 * 60 * 1e3) return;
+          if (document.visibilityState !== "visible" || Date.now() - ultima < 60 * 1e3) return;
           ultima = Date.now();
           reg.update().catch(() => {
           });
         };
+        conferir();
         document.addEventListener("visibilitychange", conferir);
         setInterval(conferir, 15 * 60 * 1e3);
       }).catch(() => {

@@ -802,7 +802,7 @@ ${api.pdf ? `<button class="btn primary" type="button" data-act="manual-pdf" sty
     const f = UA.fase;
     const corpo = f === 'pergunta'
       ? `<div class="ua-tt"><h1 id="ua-t">Atualização disponível</h1>${api.web ? '' : `<p>Versão ${esc(UA.versao)}</p>`}</div>
-        <button class="btn primary lg ua-bt" type="button" id="ua-ok" data-act="ua-atualizar">Atualizar</button><button class="link ua-dp" type="button" data-act="ua-depois">Depois</button>`
+        <button class="btn primary lg ua-bt" type="button" id="ua-ok" data-act="ua-atualizar">Atualizar</button>${api.web ? '' : '<button class="link ua-dp" type="button" data-act="ua-depois">Depois</button>'}`
       : f === 'erro'
         ? `<div class="ua-tt"><h1 id="ua-t">Não deu para atualizar agora</h1><p>Confira a internet. A versão nova entra quando o Retornei fechar.</p></div>
           <button class="btn primary lg ua-bt" type="button" data-act="ua-depois">Continuar</button>`
@@ -3084,7 +3084,7 @@ ${api.pdf ? `<button class="btn primary" type="button" data-act="manual-pdf" sty
   // com a tela de atualização aberta, atalhos do app não agem por trás; Esc = Depois
   document.addEventListener('keydown', (ev) => {
     if (!UA) return;
-    if (ev.key === 'Escape' && UA.fase === 'pergunta') { UA = null; renderUA(); }
+    if (ev.key === 'Escape' && UA.fase === 'pergunta' && !api.web) { UA = null; renderUA(); }
     // Enter sem nada focado = Atualizar (sem foco automático, para não acender o contorno de teclado na abertura)
     if (ev.key === 'Enter' && UA.fase === 'pergunta' && !$('#ua-root').contains(document.activeElement)) { ev.preventDefault(); $('#ua-ok').click(); }
     if (!['Tab', 'Enter', ' '].includes(ev.key)) ev.stopImmediatePropagation();

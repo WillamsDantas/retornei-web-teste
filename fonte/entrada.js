@@ -122,8 +122,8 @@ window.api = {
 };
 
 // ---------------------------------------------------------------- atualização (PWA)
-// A versão nova baixa sozinha por trás e fica esperando. O app mostra a tela "Atualização disponível";
-// só quando a pessoa toca em Atualizar a versão nova entra e o app recarrega.
+// A versão nova baixa sozinha por trás. O app mostra a tela "Atualização disponível" e só libera o uso
+// depois de tocar em Atualizar (sem "Depois"). Se o app foi fechado de vez, já abre na versão nova.
 const UPD = { estado: 'nenhum', versao: '', ouvintes: [], reg: null, pedido: false };
 // nome da versão vem da publicação: retornei-teste-0.0.3-abc123 → "Beta 0.0.3"; retornei-web-1.2.0-abc123 → "1.2.0"
 const numero = (k) => { const m = /-(\d+)\.(\d+)\.(\d+)-/.exec(k); return m ? [+m[1], +m[2], +m[3]] : [0, 0, 0]; };
@@ -160,13 +160,14 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
         const w = reg.installing;
         if (w) w.addEventListener('statechange', () => { if (w.state === 'installed') esperando(); });
       });
-      // confere de novo ao voltar para o app (no máximo a cada 15 min; baixa só um arquivo pequeno)
-      let ultima = Date.now();
+      // confere ao abrir e sempre que a pessoa volta para o app (no máximo 1 vez por minuto; baixa só um arquivo pequeno)
+      let ultima = 0;
       const conferir = () => {
-        if (document.visibilityState !== 'visible' || Date.now() - ultima < 15 * 60 * 1000) return;
+        if (document.visibilityState !== 'visible' || Date.now() - ultima < 60 * 1000) return;
         ultima = Date.now();
         reg.update().catch(() => {});
       };
+      conferir();
       document.addEventListener('visibilitychange', conferir);
       setInterval(conferir, 15 * 60 * 1000);
     }).catch(() => {});
